@@ -42,8 +42,8 @@ class Libvirtd(object):
             runner = process.run
 
         if LIBVIRTD is None:
-            logging.warning("Libvirtd service is not available in host, "
-                            "utils_libvirtd module will not function normally")
+            logging.debug("Libvirtd service is not available in host, "
+                          "utils_libvirtd module will not function normally")
         self.libvirtd = service.Factory.create_service(LIBVIRTD, run=runner)
 
     def _wait_for_start(self, timeout=60):
