@@ -308,8 +308,11 @@ def lock_file(filename, mode=fcntl.LOCK_EX):
 
 
 def unlock_file(lockfile):
-    fcntl.lockf(lockfile, fcntl.LOCK_UN)
-    lockfile.close()
+    try:
+        fcntl.lockf(lockfile, fcntl.LOCK_UN)
+        lockfile.close()
+    except OSError as e:
+        logging.warning("OS error when unlocking %s: %s", lockfile.name, e)
 
 
 # Utility functions for dealing with external processes
