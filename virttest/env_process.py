@@ -15,6 +15,8 @@ except ImportError:
     from urllib2 import ProxyHandler, build_opener, install_opener
 
 import aexpect
+from aexpect import remote
+
 from avocado.utils import process as a_process
 from avocado.utils import crypto
 from avocado.utils import path
@@ -37,7 +39,6 @@ from virttest import storage
 from virttest import utils_libguestfs
 from virttest import qemu_storage
 from virttest import utils_libvirtd
-from virttest import remote
 from virttest import data_dir
 from virttest import utils_net
 from virttest import nfs

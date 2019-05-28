@@ -9,7 +9,7 @@ from avocado.utils import path
 from avocado.utils import process
 from avocado.utils import wait
 
-from . import remote
+from . import remote as remote_old
 from . import utils_misc
 from .staging import service
 from .utils_gdb import GDB
@@ -36,7 +36,7 @@ class Libvirtd(object):
         self.session = session
 
         if self.session:
-            self.remote_runner = remote.RemoteRunner(session=self.session)
+            self.remote_runner = remote_old.RemoteRunner(session=self.session)
             runner = self.remote_runner.run
         else:
             runner = process.run

@@ -8,10 +8,13 @@ import shutil
 import tempfile
 
 import aexpect
+from aexpect import remote
+
 from avocado.utils import path
 from avocado.utils import process
 
-from virttest import propcan, remote, utils_libvirtd
+from virttest import propcan, utils_libvirtd
+from virttest import remote as remote_old
 from virttest import data_dir
 from virttest import utils_package
 from virttest import libvirt_version
@@ -532,12 +535,12 @@ class SSHConnection(ConnectionBase):
                 tool = '/bin/true'
             self.__dict_set__(key, tool)
 
-        self.server_authorized_keys = remote.RemoteFile(address=self.server_ip,
-                                                        client='scp',
-                                                        username=self.server_user,
-                                                        password=self.server_pwd,
-                                                        port='22',
-                                                        remote_path='/root/.ssh/authorized_keys')
+        self.server_authorized_keys = remote_old.RemoteFile(address=self.server_ip,
+                                                            client='scp',
+                                                            username=self.server_user,
+                                                            password=self.server_pwd,
+                                                            port='22',
+                                                            remote_path='/root/.ssh/authorized_keys')
 
     def conn_check(self):
         """
@@ -686,7 +689,7 @@ class TCPConnection(ConnectionBase):
         init_dict['sasl_allowed_users'] = init_dict.get('sasl_allowed_users')
         super(TCPConnection, self).__init__(init_dict)
 
-        self.remote_syslibvirtd = remote.RemoteFile(
+        self.remote_syslibvirtd = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -694,7 +697,7 @@ class TCPConnection(ConnectionBase):
             port='22',
             remote_path='/etc/sysconfig/libvirtd')
 
-        self.remote_libvirtdconf = remote.RemoteFile(
+        self.remote_libvirtdconf = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -702,7 +705,7 @@ class TCPConnection(ConnectionBase):
             port='22',
             remote_path='/etc/libvirt/libvirtd.conf')
 
-        self.remote_libvirtd_tcp_socket = remote.RemoteFile(
+        self.remote_libvirtd_tcp_socket = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -710,7 +713,7 @@ class TCPConnection(ConnectionBase):
             port='22',
             remote_path='/usr/lib/systemd/system/libvirtd-tcp.socket')
 
-        self.remote_saslconf = remote.RemoteFile(
+        self.remote_saslconf = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -816,7 +819,7 @@ class TCPConnection(ConnectionBase):
             session = remote.wait_for_login('ssh', server_ip, '22',
                                             server_user, server_pwd,
                                             r"[\#\$]\s*$")
-            remote_runner = remote.RemoteRunner(session=session)
+            remote_runner = remote_old.RemoteRunner(session=session)
             remote_runner.run('iptables -F', ignore_status=True)
             libvirtd_service = utils_libvirtd.Libvirtd(session=session)
             # From libvirt 5.6, libvirtd is using systemd socket activation
@@ -935,7 +938,7 @@ class TLSConnection(ConnectionBase):
             for dir_name in dir_dict:
                 setattr(self, dir_dict[dir_name], self.custom_pki_path)
 
-        self.server_qemuconf = remote.RemoteFile(
+        self.server_qemuconf = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -943,7 +946,7 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/libvirt/qemu.conf')
 
-        self.client_qemuconf = remote.RemoteFile(
+        self.client_qemuconf = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -951,14 +954,14 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/libvirt/qemu.conf')
 
-        self.client_hosts = remote.RemoteFile(
+        self.client_hosts = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
             password=self.client_pwd,
             port='22',
             remote_path='/etc/hosts')
-        self.server_hosts = remote.RemoteFile(
+        self.server_hosts = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -966,7 +969,7 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/hosts')
 
-        self.server_syslibvirtd = remote.RemoteFile(
+        self.server_syslibvirtd = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -974,7 +977,7 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/sysconfig/libvirtd')
 
-        self.server_libvirtdconf = remote.RemoteFile(
+        self.server_libvirtdconf = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -982,7 +985,7 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/libvirt/libvirtd.conf')
 
-        self.server_saslconf = remote.RemoteFile(
+        self.server_saslconf = remote_old.RemoteFile(
             address=self.server_ip,
             client='scp',
             username=self.server_user,
@@ -990,7 +993,7 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/sasl2/libvirt.conf')
 
-        self.client_syslibvirtd = remote.RemoteFile(
+        self.client_syslibvirtd = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -998,7 +1001,7 @@ class TLSConnection(ConnectionBase):
             port='22',
             remote_path='/etc/sysconfig/libvirtd')
 
-        self.client_libvirtdconf = remote.RemoteFile(
+        self.client_libvirtdconf = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -1342,7 +1345,7 @@ class TLSConnection(ConnectionBase):
                     session = remote.wait_for_login('ssh', server_ip, '22',
                                                     server_user, server_pwd,
                                                     r"[\#\$]\s*$")
-                    remote_runner = remote.RemoteRunner(session=session)
+                    remote_runner = remote_old.RemoteRunner(session=session)
                     remote_runner.run('iptables -F', ignore_status=True)
                     libvirtd_service = utils_libvirtd.Libvirtd(session=session)
                     if libvirt_version.version_compare(5, 6, 0, session):
@@ -1634,7 +1637,7 @@ class UNIXConnection(ConnectionBase):
         client_session = self.client_session
         self.libvirt_ver = libvirt_version.version_compare(5, 6, 0, client_session)
 
-        self.client_libvirtdconf = remote.RemoteFile(
+        self.client_libvirtdconf = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -1642,7 +1645,7 @@ class UNIXConnection(ConnectionBase):
             port='22',
             remote_path='/etc/libvirt/libvirtd.conf')
 
-        self.client_libvirtd_socket = remote.RemoteFile(
+        self.client_libvirtd_socket = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -1650,7 +1653,7 @@ class UNIXConnection(ConnectionBase):
             port='22',
             remote_path='/usr/lib/systemd/system/libvirtd.socket')
 
-        self.client_saslconf = remote.RemoteFile(
+        self.client_saslconf = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -1658,7 +1661,7 @@ class UNIXConnection(ConnectionBase):
             port='22',
             remote_path='/etc/sasl2/libvirt.conf')
 
-        self.client_hosts = remote.RemoteFile(
+        self.client_hosts = remote_old.RemoteFile(
             address=self.client_ip,
             client='scp',
             username=self.client_user,
@@ -1781,7 +1784,7 @@ class UNIXConnection(ConnectionBase):
         if self.sasl_type == 'gssapi' and auth_unix_rw == 'sasl':
             keytab = "keytab: /etc/libvirt/krb5.tab"
             sasldb = ""
-            remote_runner = remote.RemoteRunner(session=client_session)
+            remote_runner = remote_old.RemoteRunner(session=client_session)
             hostname = remote_runner.run('hostname', ignore_status=True).stdout.strip()
             pattern_to_repl = {r".*127.0.0.1\s*.*":
                                "127.0.0.1    %s localhost localhost.localdomain "

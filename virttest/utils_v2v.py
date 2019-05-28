@@ -11,6 +11,8 @@ import glob
 import logging
 import random
 
+from aexpect import remote
+
 from avocado.utils import path
 from avocado.utils import process
 from avocado.core import exceptions
@@ -23,7 +25,7 @@ from virttest import libvirt_vm as lvirt
 from virttest import virsh
 from virttest import ppm_utils
 from virttest import data_dir
-from virttest import remote
+from virttest import remote as remote_old
 from virttest import utils_misc
 from virttest import ssh_key
 
@@ -744,7 +746,7 @@ class WindowsVMCheck(VMCheck):
             remote_pwd = self.params.get("remote_pwd")
             remote.scp_from_remote(remote_ip, '22', remote_user,
                                    remote_pwd, vm_sshot, sshot_file)
-            r_runner = remote.RemoteRunner(
+            r_runner = remote_old.RemoteRunner(
                 host=remote_ip, username=remote_user, password=remote_pwd)
             r_runner.run("rm -f %s" % vm_sshot)
         return sshot_file
@@ -1205,7 +1207,7 @@ def get_vddk_thumbprint(host, password, uri_type, prompt=r"[\#\$\[\]]"):
     else:
         cmd = 'openssl x509 -in /etc/vmware-vpx/ssl/rui.crt -fingerprint -sha1 -noout'
 
-    r_runner = remote.RemoteRunner(
+    r_runner = remote_old.RemoteRunner(
         host=host,
         password=password,
         prompt=prompt,

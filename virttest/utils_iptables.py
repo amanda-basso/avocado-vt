@@ -3,10 +3,11 @@ Library to perform iptables configuration for virt test.
 """
 import logging
 
+from aexpect import remote
+
 from avocado.utils import process
 from avocado.core import exceptions
 
-from virttest import remote
 from virttest.compat_52lts import decode_to_text
 
 

@@ -1,11 +1,13 @@
 import os
 import logging
+
 import aexpect
+from aexpect import remote
 
 from avocado.utils import process
 from avocado.utils import path
 
-from virttest import remote
+from virttest import remote as remote_old
 from virttest.compat_52lts import decode_to_text
 
 
@@ -218,7 +220,7 @@ def setup_remote_known_hosts_file(client_ip, server_ip,
     :type server_pwd: str
 
     :return: a RemoteFile object for the file known_hosts on remote host
-    :rtype: remote.RemoteFile
+    :rtype: remote_old.RemoteFile
     :return: None if required command is not found
     """
     logging.debug('Performing known_hosts file setup on %s from %s.' %
@@ -232,7 +234,7 @@ def setup_remote_known_hosts_file(client_ip, server_ip,
 
     cmd = "%s %s" % (abs_path, client_ip)
     host_key = decode_to_text(process.system_output(cmd, verbose=False))
-    remote_known_hosts_file = remote.RemoteFile(
+    remote_known_hosts_file = remote_old.RemoteFile(
         address=server_ip,
         client='scp',
         username=server_user,

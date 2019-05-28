@@ -32,6 +32,8 @@ import shutil
 import ast
 
 import aexpect
+from aexpect import remote
+
 from avocado.core import exceptions
 from avocado.utils import process
 from avocado.utils import aurl
@@ -48,7 +50,7 @@ from virttest import bootstrap
 from virttest import data_dir
 from virttest import error_context
 from virttest import qemu_virtio_port
-from virttest import remote
+from virttest import remote as remote_old
 from virttest import scan_autotest_results
 from virttest import storage
 from virttest import utils_misc
@@ -2736,9 +2738,9 @@ class RemoteDiskManager(object):
         remote_host = params.get("remote_ip")
         remote_user = params.get("remote_user")
         remote_pwd = params.get("remote_pwd")
-        self.runner = remote.RemoteRunner(host=remote_host,
-                                          username=remote_user,
-                                          password=remote_pwd)
+        self.runner = remote_old.RemoteRunner(host=remote_host,
+                                              username=remote_user,
+                                              password=remote_pwd)
 
     def get_free_space(self, disk_type, path='/', vgname=None):
         """
@@ -2901,10 +2903,10 @@ def check_dest_vm_network(vm, vm_ip, remote_host, username, password,
     """
     Ping migrated vms on remote host.
     """
-    runner = remote.RemoteRunner(host=remote_host,
-                                 username=username,
-                                 password=password,
-                                 prompt=shell_prompt)
+    runner = remote_old.RemoteRunner(host=remote_host,
+                                     username=username,
+                                     password=password,
+                                     prompt=shell_prompt)
 
     logging.debug("Check VM network connectivity...")
     ping_failed = True
@@ -2929,9 +2931,9 @@ class RemoteVMManager(object):
         self.remote_host = params.get("server_ip")
         self.remote_user = params.get("server_user")
         self.remote_pwd = params.get("server_pwd")
-        self.runner = remote.RemoteRunner(host=self.remote_host,
-                                          username=self.remote_user,
-                                          password=self.remote_pwd)
+        self.runner = remote_old.RemoteRunner(host=self.remote_host,
+                                              username=self.remote_user,
+                                              password=self.remote_pwd)
 
     def setup_ssh_auth(self, vm_ip, vm_pwd, vm_user="root",
                        port=22, timeout=20):
