@@ -742,7 +742,7 @@ class HumanMonitor(Monitor):
     """
 
     PROMPT_TIMEOUT = 60
-    CMD_TIMEOUT = 120
+    CMD_TIMEOUT = 900
 
     def __init__(self, vm, name, filename, suppress_exceptions=False):
         """
