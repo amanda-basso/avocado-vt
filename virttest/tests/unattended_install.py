@@ -1297,6 +1297,8 @@ def run(test, params, env):
         error_context.context(msg, logging.info)
         download.get_file(nfs_link, local_link)
         params[media] = local_link
+    # at this stage we need vm specific parameters
+    params = params.object_params(vm.name)
 
     unattended_install_config = UnattendedInstallConfig(test, params, vm)
     unattended_install_config.setup()
